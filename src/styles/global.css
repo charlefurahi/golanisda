@@ -1,0 +1,55 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background-color: #f7f7f7;
+  color: #222;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+/* Typography */
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background-color: #f7f7f7;
+  color: #222;
+  line-height: 1.6;
+}
+
+h1, h2, h3 {
+  font-family: 'Segoe UI', sans-serif;
+  margin-bottom: 0.5rem;
+  color: #0b3d2e;
+}
+
+p {
+  margin-bottom: 1rem;
+  color: #555;
+}
+
+/* Buttons */
+a.btn {
+  transition: all 0.3s ease;
+}
+
+a.btn:hover {
+  transform: translateY(-2px);
+  background: #0b3d2e;
+  color: #fff;
+}
+
+/* Cards hover effect */
+.card, .method, .project {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover, .method:hover, .project:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
