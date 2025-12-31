@@ -1,15 +1,14 @@
 <template>
   <header class="navbar">
     <div class="nav-container">
-      <div class="logo">
+      <RouterLink to="/" class="logo">
         <img src="/src/assets/logo.png" alt="Golani SDA Logo" />
         <span>Golani SDA Church</span>
-      </div>
+      </RouterLink>
 
       <nav class="nav-links desktop-only">
         <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-        <RouterLink to="/ministries">Ministries</RouterLink>
+        <RouterLink to="/announcements">Announcements</RouterLink> <RouterLink to="/ministries">Ministries</RouterLink>
         <RouterLink to="/sermons">Sermons</RouterLink>
         <RouterLink to="/events">Events</RouterLink>
         <RouterLink to="/contact">Contact</RouterLink>
@@ -24,20 +23,24 @@
 
 <script setup>
 import { RouterLink } from 'vue-router'
+// Define emits for clarity
+defineEmits(['openSidebar'])
 </script>
 
 <style scoped>
 .navbar {
   background: #0b3d2e;
   color: #fff;
-  position: relative;
-  z-index: 10; /* Ensure navbar is above hero images */
+  position: sticky; /* Sticky is better so users don't have to scroll up to navigate */
+  top: 0;
+  z-index: 1000; 
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 .nav-container {
   max-width: 1200px;
   margin: auto;
-  padding: 1rem;
+  padding: 0.8rem 1.2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -48,6 +51,8 @@ import { RouterLink } from 'vue-router'
   align-items: center;
   gap: 0.6rem;
   font-weight: bold;
+  text-decoration: none;
+  color: white;
 }
 
 .logo img {
@@ -56,11 +61,25 @@ import { RouterLink } from 'vue-router'
 
 .nav-links {
   display: flex;
-  gap: 1.2rem;
+  gap: 1.5rem; /* Increased gap for better spacing */
 }
 
 .nav-links a {
-  color: #fff;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #ffffff;
+}
+
+/* Active link styling */
+.router-link-active {
+  color: #ffffff !important;
+  font-weight: 700;
 }
 
 .menu-btn {
@@ -69,18 +88,20 @@ import { RouterLink } from 'vue-router'
   border: none;
   color: #fff;
   cursor: pointer;
-  position: relative;
-  z-index: 11; /* Ensure button is above images */
+  display: block; /* Show by default */
 }
 
-/* Responsive */
+/* Responsive Logic */
 .desktop-only {
   display: none;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 992px) {
   .desktop-only {
     display: flex;
+  }
+  .menu-btn {
+    display: none; /* Hide hamburger on large screens */
   }
 }
 </style>

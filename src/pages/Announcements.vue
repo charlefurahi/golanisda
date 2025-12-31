@@ -6,6 +6,16 @@
     </header>
 
     <div class="announcement-list">
+      <!-- New Year Eve Event -->
+      <article class="announcement">
+        <h3>New Year Eve Service</h3>
+        <span class="date">December 31, 17:00 – 20:00</span>
+        <p>
+          All members are invited to join the special New Year Eve service to celebrate and welcome the new year in prayer and worship.
+        </p>
+      </article>
+
+      <!-- Existing Announcements -->
       <article class="announcement">
         <h3>Youth Sabbath Program</h3>
         <span class="date">Saturday, 21 September 2025</span>
@@ -75,3 +85,4 @@
   color: #777;
 }
 </style>
+=
