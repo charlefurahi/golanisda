@@ -1,5 +1,6 @@
 <template>
   <section class="hero-section">
+    <!-- Background Slider -->
     <div class="hero-background">
       <div
         v-for="(img, index) in images"
@@ -9,12 +10,16 @@
         :style="{ backgroundImage: `url(${img})` }"
       ></div>
 
+      <!-- Gradient Overlay -->
       <div class="hero-overlay"></div>
     </div>
 
+    <!-- Content -->
     <div class="hero-content">
       <h1 class="animate-up">Golani SDA Church</h1>
-      <p class="animate-up-delay">Committed to spreading the Gospel of Jesus Christ</p>
+      <p class="animate-up-delay">
+        Committed to spreading the Gospel of Jesus Christ
+      </p>
     </div>
   </section>
 </template>
@@ -23,7 +28,6 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import axios from 'axios'
 
-// 1. Initial local images (Fallback)
 const images = ref([
   'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=1600&q=80',
   'https://images.unsplash.com/photo-1544427928-c49cdfebf194?q=80&w=1920'
@@ -34,50 +38,52 @@ let interval = null
 
 const fetchHeroImages = async () => {
   try {
-    // 2. Try to get images from your Gallery API
     const response = await axios.get('http://127.0.0.1:8000/api/gallery/')
-    
-    if (response.data && response.data.length > 0) {
-      // 3. Update the images list with Django media URLs
-      images.value = response.data.map(item => 
-        item.image.startsWith('http') ? item.image : `http://127.0.0.1:8000${item.image}`
+    if (response.data?.length) {
+      images.value = response.data.map(item =>
+        item.image.startsWith('http')
+          ? item.image
+          : `http://127.0.0.1:8000${item.image}`
       )
     }
-  } catch (error) {
-    console.warn("Backend Gallery empty or unreachable. Using fallback images.")
+  } catch {
+    console.warn('Using fallback hero images')
   }
 }
 
 onMounted(async () => {
   await fetchHeroImages()
-  
-  // 4. Only start sliding if we have more than one image
+
   if (images.value.length > 1) {
     interval = setInterval(() => {
-      currentIndex.value = (currentIndex.value + 1) % images.value.length
+      currentIndex.value =
+        (currentIndex.value + 1) % images.value.length
     }, 5000)
   }
 })
 
-onUnmounted(() => {
-  if (interval) clearInterval(interval)
-})
+onUnmounted(() => interval && clearInterval(interval))
 </script>
 
 <style scoped>
+/* ================================
+   HERO SECTION BASE
+================================ */
 .hero-section {
   position: relative;
-  height: 50vh;
-  max-height: 500px;
+  height: min(85vh, 650px);
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
   text-align: center;
+  font-family: 'Poppins', sans-serif;
   color: #fff;
-  background: #0b3d2e; /* Brand color fallback */
+  overflow: hidden;
 }
 
+/* ================================
+   BACKGROUND
+================================ */
 .hero-background {
   position: absolute;
   inset: 0;
@@ -86,12 +92,11 @@ onUnmounted(() => {
 
 .hero-image {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background-size: cover;
   background-position: center;
   opacity: 0;
-  transition: opacity 1.5s ease-in-out;
+  transition: opacity 1.6s ease;
   filter: brightness(45%);
 }
 
@@ -99,50 +104,117 @@ onUnmounted(() => {
   opacity: 1;
 }
 
+/* Blue Modern Gradient */
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.3);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(3, 37, 126, 0.85),
+      rgba(2, 92, 157, 0.75),
+      rgba(0, 0, 0, 0.6)
+    );
   z-index: 1;
 }
 
+/* ================================
+   CONTENT
+================================ */
 .hero-content {
   position: relative;
   z-index: 2;
   max-width: 900px;
-  padding: 0 1rem;
+  padding: 0 1.5rem;
 }
 
 .hero-content h1 {
-  font-size: clamp(2rem, 6vw, 3.5rem);
-  text-shadow: 0 4px 10px rgba(0,0,0,0.6);
-  margin-bottom: 0.5rem;
+  font-weight: 700;
+  font-size: clamp(2.3rem, 6vw, 3.8rem);
   letter-spacing: 1px;
+  margin-bottom: 0.75rem;
+  text-shadow: 0 10px 30px rgba(0,0,0,.6);
 }
 
 .hero-content p {
-  font-size: clamp(1rem, 2.5vw, 1.4rem);
-  text-shadow: 0 2px 6px rgba(0,0,0,0.5);
   font-weight: 300;
+  font-size: clamp(1.05rem, 2.8vw, 1.4rem);
+  opacity: 0.95;
+  margin-bottom: 2rem;
 }
 
-/* Text Animations */
-.animate-up {
-  animation: fadeInUp 1s ease-out forwards;
+/* ================================
+   BUTTONS
+================================ */
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
 }
+
+.btn {
+  padding: 0.75rem 1.8rem;
+  border-radius: 30px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btn.primary {
+  background: #ffffff;
+  color: #0a3fa8;
+}
+
+.btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(255,255,255,.25);
+}
+
+.btn.secondary {
+  border: 1px solid rgba(255,255,255,.7);
+  color: #fff;
+}
+
+.btn.secondary:hover {
+  background: rgba(255,255,255,.15);
+}
+
+/* ================================
+   ANIMATIONS
+================================ */
+.animate-up {
+  animation: fadeUp 0.9s ease forwards;
+}
+
 .animate-up-delay {
-  animation: fadeInUp 1s ease-out 0.4s forwards;
+  animation: fadeUp 0.9s ease 0.3s forwards;
   opacity: 0;
 }
 
-@keyframes fadeInUp {
+.animate-up-delay-2 {
+  animation: fadeUp 0.9s ease 0.6s forwards;
+  opacity: 0;
+}
+
+@keyframes fadeUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(25px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* ================================
+   MOBILE TWEAKS
+================================ */
+@media (max-width: 640px) {
+  .hero-section {
+    height: 75vh;
   }
 }
 </style>

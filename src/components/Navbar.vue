@@ -1,20 +1,28 @@
 <template>
   <header class="navbar">
     <div class="nav-container">
+      <!-- Logo -->
       <RouterLink to="/" class="logo">
         <img src="/src/assets/logo.png" alt="Golani SDA Logo" />
         <span>Golani SDA Church</span>
       </RouterLink>
 
+      <!-- Desktop Navigation -->
       <nav class="nav-links desktop-only">
         <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/announcements">Announcements</RouterLink> <RouterLink to="/ministries">Ministries</RouterLink>
+        <RouterLink to="/announcements">Announcements</RouterLink>
+        <RouterLink to="/ministries">Ministries</RouterLink>
         <RouterLink to="/sermons">Sermons</RouterLink>
         <RouterLink to="/events">Events</RouterLink>
         <RouterLink to="/contact">Contact</RouterLink>
       </nav>
 
-      <button class="menu-btn" @click="$emit('openSidebar')">
+      <!-- Mobile Menu Button -->
+      <button
+        class="menu-btn"
+        aria-label="Open Menu"
+        @click="$emit('openSidebar')"
+      >
         ☰
       </button>
     </div>
@@ -23,75 +31,116 @@
 
 <script setup>
 import { RouterLink } from 'vue-router'
-// Define emits for clarity
 defineEmits(['openSidebar'])
 </script>
 
 <style scoped>
+/* ===============================
+   NAVBAR BASE
+================================ */
 .navbar {
-  background: #0b3d2e;
-  color: #fff;
-  position: sticky; /* Sticky is better so users don't have to scroll up to navigate */
+  position: sticky;
   top: 0;
-  z-index: 1000; 
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  z-index: 1000;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(
+    90deg,
+    #0a2a6c,
+    #0d47a1,
+    #1565c0
+  );
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
 }
 
+/* ===============================
+   CONTAINER
+================================ */
 .nav-container {
   max-width: 1200px;
   margin: auto;
-  padding: 0.8rem 1.2rem;
+  padding: 0.85rem 1.2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
+/* ===============================
+   LOGO
+================================ */
 .logo {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  font-weight: bold;
+  gap: 0.65rem;
   text-decoration: none;
-  color: white;
+  color: #ffffff;
 }
 
 .logo img {
-  height: 40px;
+  height: 38px;
+  width: auto;
+  color: white;
+  
 }
 
+.logo span {
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+}
+
+/* ===============================
+   DESKTOP NAV
+================================ */
 .nav-links {
   display: flex;
-  gap: 1.5rem; /* Increased gap for better spacing */
+  gap: 1.6rem;
 }
 
 .nav-links a {
-  color: rgba(255, 255, 255, 0.8);
-  text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 500;
-  transition: color 0.3s;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.85);
+  position: relative;
+  transition: color 0.25s ease;
 }
 
 .nav-links a:hover {
   color: #ffffff;
 }
 
-/* Active link styling */
+/* Active Link Indicator */
 .router-link-active {
-  color: #ffffff !important;
-  font-weight: 700;
+  color: #ffffff;
+  font-weight: 600;
 }
 
+.router-link-active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 100%;
+  height: 2px;
+  background: #ffffff;
+  border-radius: 2px;
+}
+
+/* ===============================
+   MOBILE MENU BUTTON
+================================ */
 .menu-btn {
-  font-size: 1.8rem;
+  font-size: 1.9rem;
   background: none;
   border: none;
-  color: #fff;
+  color: #ffffff;
   cursor: pointer;
-  display: block; /* Show by default */
+  line-height: 1;
 }
 
-/* Responsive Logic */
+/* ===============================
+   RESPONSIVE
+================================ */
 .desktop-only {
   display: none;
 }
@@ -100,8 +149,9 @@ defineEmits(['openSidebar'])
   .desktop-only {
     display: flex;
   }
+
   .menu-btn {
-    display: none; /* Hide hamburger on large screens */
+    display: none;
   }
 }
 </style>

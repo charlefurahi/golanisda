@@ -1,207 +1,253 @@
 <template>
-  <section class="sermon-page">
+  <section class="ministries-page">
     <header class="page-header">
-      <h1>Sermons</h1>
-      <p>Watch and listen to our weekly messages of hope.</p>
+      <h1>Our Ministries</h1>
+      <p>Discover the heartbeat of our church through our various departments.</p>
     </header>
 
-    <div v-if="loading" class="loading">Preparing the word...</div>
-
-    <div v-else class="sermon-grid">
-      <article v-for="sermon in sermons" :key="sermon.id" class="sermon-card">
-        
-        <div v-if="sermon.video_url" class="video-container">
-          <iframe 
-            :src="formatVideoUrl(sermon.video_url)" 
-            frameborder="0" 
-            allowfullscreen
-          ></iframe>
-        </div>
-        
-        <div v-else-if="sermon.poster_image" class="poster-container">
-          <img :src="'http://127.0.0.1:8000' + sermon.poster_image" alt="Sermon Poster" />
-        </div>
-
-        <div class="sermon-content">
-          <span class="sermon-date">{{ new Date(sermon.date).toLocaleDateString() }}</span>
-          <h3>{{ sermon.title }}</h3>
-          <p class="speaker"><strong>Speaker:</strong> {{ sermon.speaker }}</p>
-          <p class="description">{{ sermon.description }}</p>
-
-          <div class="media-actions">
-            <div v-if="sermon.audio_file" class="audio-box">
-              <label>Listen to Audio:</label>
-              <audio controls>
-                <source :src="'http://127.0.0.1:8000' + sermon.audio_file" type="audio/mpeg">
-                Your browser does not support the audio element.
-              </audio>
-            </div>
-
-            <a v-if="sermon.pdf_notes" 
-               :href="'http://127.0.0.1:8000' + sermon.pdf_notes" 
-               target="_blank" 
-               class="download-btn">
-               📄 Download Sermon Notes (PDF)
-            </a>
-          </div>
-        </div>
-      </article>
+    <div v-if="loading" class="status-message">
+      <div class="spinner"></div>
+      <p>Loading departments...</p>
     </div>
 
-    <div v-if="!loading && sermons.length === 0" class="no-data">
-      No sermons have been uploaded yet.
+    <div v-else class="ministries-grid">
+      <div 
+        v-for="ministry in ministries" 
+        :key="ministry.id" 
+        class="ministry-card"
+      >
+        <div class="ministry-image">
+          <img 
+            v-if="ministry.image" 
+            :src="resolveUrl(ministry.image)" 
+            :alt="ministry.name" 
+            class="header-img"
+          />
+          <div v-else class="image-placeholder">
+            <span>{{ ministry.name }}</span>
+          </div>
+        </div>
+
+        <div class="ministry-content">
+          <div class="title-row">
+            <h3>{{ ministry.name }}</h3>
+          </div>
+          
+          <p class="description">{{ ministry.description }}</p>
+
+          <div class="ministry-footer">
+            <div v-if="ministry.leader" class="leader-info">
+              <span class="icon">👤</span>
+              <span class="leader-name">Leader: {{ ministry.leader }}</span>
+            </div>
+            <button class="join-btn" @click="handleJoin(ministry.name)">Learn More</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="!loading && ministries.length === 0" class="no-data">
+      <p>Ministries list is currently being updated. Please check back later.</p>
     </div>
   </section>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import api from '../services/api'
 
-const sermons = ref([])
+const ministries = ref([])
 const loading = ref(true)
+const BACKEND_URL = 'http://127.0.0.1:8000'
 
-// Function to convert normal YouTube links to "Embed" links
-const formatVideoUrl = (url) => {
-  if (url.includes('youtube.com/watch?v=')) {
-    return url.replace('watch?v=', 'embed/')
-  }
-  if (url.includes('youtu.be/')) {
-    return url.replace('youtu.be/', 'youtube.com/embed/')
-  }
-  return url
+// URL Resolver for media files
+const resolveUrl = (path) => {
+  if (!path) return ''
+  return path.startsWith('http') ? path : `${BACKEND_URL}${path}`
 }
 
-onMounted(async () => {
+const fetchMinistries = async () => {
+  loading.value = true
   try {
-    const response = await axios.get('http://127.0.0.1:8000/api/sermons/')
-    // Sort by date newest first
-    sermons.value = response.data.sort((a, b) => new Date(b.date) - new Date(a.date))
+    const response = await api.get('/ministries/')
+    ministries.value = response.data
   } catch (error) {
-    console.error("Error fetching sermons:", error)
+    console.error("Error fetching ministries:", error)
   } finally {
     loading.value = false
   }
+}
+
+const handleJoin = (name) => {
+  alert(`Interested in joining ${name}? Contact the church office for more details!`)
+}
+
+onMounted(() => {
+  fetchMinistries()
 })
 </script>
 
 <style scoped>
-.sermon-page {
-  max-width: 1100px;
+.ministries-page {
+  max-width: 1200px;
   margin: auto;
   padding: 3rem 1rem;
 }
 
 .page-header {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
 }
 
-.sermon-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 2rem;
-}
-
-.sermon-card {
-  background: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-  display: flex;
-  flex-direction: column;
-}
-
-.video-container {
-  position: relative;
-  padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-  height: 0;
-}
-
-.video-container iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.poster-container img {
-  width: 100%;
-  height: 250px;
-  object-fit: cover;
-}
-
-.sermon-content {
-  padding: 1.5rem;
-  flex-grow: 1;
-}
-
-.sermon-date {
-  font-size: 0.8rem;
+.page-header h1 {
   color: #0b3d2e;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.sermon-content h3 {
-  margin: 0.5rem 0;
-  color: #333;
-}
-
-.speaker {
-  font-size: 0.9rem;
-  color: #555;
+  font-size: 2.8rem;
+  font-weight: 800;
   margin-bottom: 0.5rem;
 }
 
-.description {
-  font-size: 0.9rem;
-  color: #777;
-  line-height: 1.5;
-  margin-bottom: 1.5rem;
+.page-header p {
+  color: #666;
+  font-size: 1.1rem;
 }
 
-.media-actions {
-  border-top: 1px solid #eee;
-  padding-top: 1rem;
+/* Ministries Layout */
+.ministries-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2.5rem;
+}
+
+.ministry-card {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  border: 1px solid #f0f0f0;
+  transition: transform 0.3s ease;
 }
 
-.audio-box label {
-  display: block;
-  font-size: 0.8rem;
-  margin-bottom: 5px;
-  font-weight: bold;
+.ministry-card:hover {
+  transform: translateY(-8px);
 }
 
-audio {
+/* Image Handling */
+.ministry-image {
   width: 100%;
-  height: 35px;
+  aspect-ratio: 16 / 9;
+  background-color: #0b3d2e;
+  overflow: hidden;
 }
 
-.download-btn {
-  display: inline-block;
-  padding: 0.8rem;
-  background: #f0f4f2;
-  color: #0b3d2e;
-  text-decoration: none;
-  border-radius: 6px;
+.header-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-placeholder {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  opacity: 0.3;
+}
+
+/* Content Area */
+.ministry-content {
+  padding: 1.8rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.ministry-content h3 {
+  font-size: 1.5rem;
+  color: #1a1a1a;
+  margin-bottom: 1rem;
+}
+
+.description {
+  color: #555;
+  line-height: 1.6;
+  font-size: 0.95rem;
+  margin-bottom: 2rem;
+  flex-grow: 1;
+}
+
+/* Footer Section */
+.ministry-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #f5f5f5;
+  padding-top: 1.2rem;
+}
+
+.leader-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 0.85rem;
-  text-align: center;
+  color: #777;
+}
+
+.leader-name {
+  font-weight: 600;
+  color: #333;
+}
+
+.join-btn {
+  background: #0b3d2e;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
   transition: background 0.2s;
 }
 
-.download-btn:hover {
-  background: #0b3d2e;
-  color: #fff;
+.join-btn:hover {
+  background: #0e4d3a;
 }
 
-.loading, .no-data {
+/* Status States */
+.status-message {
   text-align: center;
-  padding: 4rem;
+  padding: 5rem;
+}
+
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #0b3d2e;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.no-data {
+  text-align: center;
+  padding: 5rem;
   color: #888;
+}
+
+@media (max-width: 480px) {
+  .page-header h1 {
+    font-size: 2rem;
+  }
 }
 </style>

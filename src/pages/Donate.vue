@@ -61,11 +61,11 @@ onMounted(async () => {
 }
 
 .page-header h1 {
-  color: #0b3d2e;
+  color: rgba(2, 92, 157, 0.75),;
 }
 
 .page-header p {
-  color: #555;
+  color: black;
   margin-top: 0.5rem;
 }
 
@@ -78,7 +78,7 @@ onMounted(async () => {
 .method {
   background: #f9f9f9;
   padding: 1.5rem;
-  border-left: 5px solid #0b3d2e;
+  border-left: 5px solid dark blue;
   text-align: center;
   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
   transition: transform 0.2s;
@@ -90,7 +90,7 @@ onMounted(async () => {
 
 .method h3 {
   margin-bottom: 0.5rem;
-  color: #0b3d2e;
+  color: rgba(2, 92, 157, 0.75),
 }
 
 .description {

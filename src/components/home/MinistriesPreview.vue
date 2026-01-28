@@ -1,137 +1,113 @@
 <template>
-  <section class="section">
-    <div class="container">
-      <h2>Our Ministries</h2>
-      <p class="subtitle">Discover how you can grow and serve within our community.</p>
+  <div>
+    <!-- Hero Section for Ministries -->
+    <section class="hero-section hero-ministries">
+      <div class="hero-content">
+        <h1>Our Ministries</h1>
+        <p>Empowering members to serve God and community</p>
+      </div>
+    </section>
 
-      <div v-if="loading" class="loading">Loading ministries...</div>
-
-      <div v-else class="grid">
-        <div 
-          v-for="ministry in limitedMinistries" 
-          :key="ministry.id" 
-          class="ministry-card"
-        >
-          <div class="card-content">
-            <div v-if="ministry.image" class="mini-icon">
-               <img :src="'http://127.0.0.1:8000' + ministry.image" alt="" />
-            </div>
+    <!-- Ministries Grid -->
+    <section class="ministries-section">
+      <div class="container">
+        <div class="grid">
+          <div class="card" v-for="(ministry, index) in ministries" :key="index">
+            <div class="icon">{{ ministry.icon }}</div>
             <h3>{{ ministry.name }}</h3>
-            <p>{{ truncate(ministry.description) }}</p>
+            <p>{{ ministry.description }}</p>
           </div>
         </div>
       </div>
-
-      <RouterLink to="/ministries" class="link">
-        Explore all ministries →
-      </RouterLink>
-    </div>
-  </section>
+    </section>
+  </div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
-import { RouterLink } from 'vue-router'
-import axios from 'axios'
+import { ref } from 'vue'
 
-const ministries = ref([])
-const loading = ref(true)
-
-// Truncate description for the preview cards
-const truncate = (text) => {
-  return text.length > 60 ? text.substring(0, 60) + '...' : text
-}
-
-// Show only the first 4 ministries on the Home page
-const limitedMinistries = computed(() => {
-  return ministries.value.slice(0, 4)
-})
-
-onMounted(async () => {
-  try {
-    const response = await axios.get('http://127.0.0.1:8000/api/ministries/')
-    ministries.value = response.data
-  } catch (error) {
-    console.error("Error fetching ministry preview:", error)
-  } finally {
-    loading.value = false
-  }
-})
+const ministries = ref([
+  { icon: '📖', name: 'Bible Study', description: 'Deepening faith through study.' },
+  { icon: '🎶', name: 'Music Ministry', description: 'Leading worship through music.' },
+  { icon: '🤝', name: 'Community Outreach', description: 'Serving the local community.' },
+  { icon: '🙏', name: 'Prayer Ministry', description: 'Interceding for the congregation.' },
+])
 </script>
 
 <style scoped>
-.section {
-  padding: 4rem 1rem;
-  background: #fdfdfd;
+.hero-ministries {
+  height: 50vh;
+  background: linear-gradient(135deg,#1565c0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+  color: #fff;
 }
 
-.container {
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
-h2 {
-  color: #0b3d2e;
-  font-size: 2rem;
+.hero-ministries h1 {
+  font-size: clamp(2rem, 6vw, 3rem);
+  font-weight: 700;
   margin-bottom: 0.5rem;
 }
 
-.subtitle {
-  color: #666;
-  margin-bottom: 2.5rem;
+.hero-ministries p {
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  opacity: 0.9;
+}
+
+.ministries-section {
+  background: #f9fbff;
+  padding: 5rem 1rem;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
 }
 
-.ministry-card {
+.card {
   background: #fff;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  border-bottom: 4px solid #0b3d2e;
-  transition: transform 0.3s ease;
+  border-radius: 15px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.ministry-card:hover {
-  transform: translateY(-8px);
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
 }
 
-.ministry-card h3 {
-  color: #333;
-  margin-bottom: 0.8rem;
-  font-size: 1.2rem;
+.card .icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
 }
 
-.ministry-card p {
-  font-size: 0.9rem;
-  color: #777;
-  line-height: 1.4;
-}
-
-.link {
-  display: inline-block;
+.card h3 {
+  font-size: 1.3rem;
   color: #0b3d2e;
-  text-decoration: none;
-  font-weight: 700;
-  padding: 0.5rem 1rem;
-  border: 1px solid #0b3d2e;
-  border-radius: 4px;
-  transition: all 0.2s;
+  margin-bottom: 0.5rem;
 }
 
-.link:hover {
-  background: #0b3d2e;
-  color: #fff;
+.card p {
+  font-size: 0.95rem;
+  color: #555;
 }
 
-.loading {
-  padding: 2rem;
-  color: #999;
+@media (max-width: 640px) {
+  .hero-ministries {
+    height: 40vh;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

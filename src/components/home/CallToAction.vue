@@ -18,7 +18,7 @@ import { RouterLink } from 'vue-router'
 
 <style scoped>
 .cta-section {
-  background: linear-gradient(135deg, #0b3d2e 0%, #1a5d4a 100%);
+  background: linear-gradient(135deg, #476092 0%, #1a5d4a 100%);
   color: #fff;
   padding: 5rem 1rem;
   text-align: center;

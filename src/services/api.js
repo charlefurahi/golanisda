@@ -9,4 +9,15 @@ const api = axios.create({
   }
 });
 
+// Prevent cached GET responses
+api.interceptors.request.use((config) => {
+  if (config.method === 'get') {
+    config.params = {
+      ...config.params,
+      _t: Date.now()
+    };
+  }
+  return config;
+});
+
 export default api;

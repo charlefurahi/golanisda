@@ -63,11 +63,11 @@ onMounted(async () => {
 }
 
 .page-header h1 {
-  color: #0b3d2e;
+  color: darkblue;
 }
 
 .page-header p {
-  color: #555;
+  color: black;
   margin-top: 0.5rem;
 }
 
