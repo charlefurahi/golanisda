@@ -118,6 +118,7 @@ onUnmounted(() => {
   font-weight: 300;
   font-size: clamp(1.05rem, 2.8vw, 1.4rem);
   opacity: 0.95;
+  color: black;
 }
 
 .animate-up {
