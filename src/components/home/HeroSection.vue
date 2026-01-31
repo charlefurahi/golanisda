@@ -28,8 +28,8 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 
 /* 🔹 IMPORT LOCAL IMAGES (VERY IMPORTANT) */
-import gallery1 from '@/assets/images/gallery1.jpg'
-import gallery2 from '@/assets/images/gallery2.jpg'
+import gallery1 from '@/assets/gallery1.jpg'
+import gallery2 from '@/assets/gallery2.jpg'
 // import gallery3 from '@/assets/images/gallery3.jpg'
 
 const images = ref([
