@@ -81,7 +81,7 @@ onUnmounted(() => {
   background-position: center;
   opacity: 0;
   transition: opacity 1.6s ease;
-  filter: brightness(75%);
+  filter: brightness(85%);
 }
 
 .hero-image.active {
