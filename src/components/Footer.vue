@@ -34,7 +34,7 @@
         <h4>Connect</h4>
         <p>Email: info@golanisda.org</p>
         <p>Dar es Salaam, Tanzania</p>
-        <p>Location: Yombo 2 / Changanyikeni</p>
+        <p>Location: Golani - Dar es Salaam</p>
       </div>
     </div>
 
