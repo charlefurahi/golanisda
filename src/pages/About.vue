@@ -64,89 +64,85 @@ import { RouterLink } from 'vue-router'
 
 <style scoped>
 .about-page {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: auto;
-  padding: 3rem 1rem;
-  font-family: "Segoe UI", Arial, sans-serif;
-  color: #222;
-  line-height: 1.7;
+  padding: clamp(3rem, 6vw, 5rem) 1rem;
+  color: var(--text-dark);
+  line-height: 1.8;
 }
 
-/* Hero / Header */
+/* Hero */
 .hero {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
 }
 
 .hero h1 {
-  font-size: clamp(2rem, 4vw, 3rem);
-  color: #0b3d2e;
+  color: var(--primary);
+  margin-bottom: 0.8rem;
 }
 
 .hero p {
-  margin-top: 0.5rem;
-  color: #555;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
+  max-width: 650px;
+  margin: auto;
 }
 
-/* Mission, Method & Vision / Identity */
-.mission-vision, .identity {
-  margin-bottom: 3rem;
-}
-
+/* Mission Grid */
 .mission-vision {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
+  margin-bottom: 4rem;
 }
 
-.card {
-  background: #f9f9f9;
-  padding: 1.5rem;
-  border-left: 5px solid #0b3d2e;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+.about-card {
+  padding: 2rem;
+  border-radius: var(--radius);
+  background: var(--white);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  transition: 0.3s ease;
 }
 
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+.about-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.08);
 }
 
-.card h2 {
-  margin-bottom: 0.5rem;
-  color: #0b3d2e;
+.about-card h2 {
+  margin-bottom: 0.8rem;
+  color: var(--primary);
 }
 
-.card p {
-  color: #555;
+/* Identity */
+.identity {
+  margin-bottom: 3rem;
 }
 
 .identity h2 {
-  color: #0b3d2e;
-  margin-bottom: 0.5rem;
-}
-
-.identity p, .identity ul {
-  color: #555;
-  margin-bottom: 1rem;
+  color: var(--primary);
+  margin: 2rem 0 0.8rem;
 }
 
 .identity ul {
-  list-style: disc inside;
-  padding-left: 1rem;
+  margin-top: 1rem;
+  padding-left: 1.2rem;
 }
 
-/* Call to Action */
+.identity li {
+  margin-bottom: 0.6rem;
+}
+
+/* CTA */
 .cta {
   text-align: center;
-  margin-top: 2rem;
+  margin-top: 3rem;
   font-weight: 500;
 }
 
 .cta a {
-  color: #0b3d2e;
+  color: var(--primary);
   font-weight: 600;
-  text-decoration: none;
 }
 
 .cta a:hover {
